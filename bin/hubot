@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+
+npm install
+basedir=/var/slack
+export PATH="node_modules/.bin:node_modules/hubot/node_modules/.bin:$PATH"
+export PORT=8082
+. $basedir/secret/token
+
+echo HUBOT_SLACK_TOKEN=$HUBOT_SLACK_TOKEN
+
+exec node_modules/.bin/hubot --name "pi" "$@"
