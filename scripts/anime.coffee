@@ -1,11 +1,11 @@
+# Description:
+#   anime
+
 fs = require 'fs'
 schedule = require 'node-schedule'
+env = require './env.coffee'
 
-animefile = "/var/www/html/data/anime.json"
 notify_span = 60 * 10
-
-# https://slack.com/api/users.list?token=xxxx
-user = "U7LMRS8QP"
 
 datetostr = (ux) ->
   d = new Date( ux * 1000 )
@@ -19,9 +19,8 @@ timetostr = (ux) ->
   min   = ("0"+d.getMinutes()).slice(-2)
   return hour + ":" + min
 
-
 todaysanime = () ->
-  data = JSON.parse(fs.readFileSync animefile)
+  data = JSON.parse(fs.readFileSync env.ANIMEFILE)
   ret = ""
   d = new Date()
   y = new Date()
@@ -33,19 +32,39 @@ todaysanime = () ->
       ret += datetostr(p["StTime"]) + " " + timetostr(p["StTime"]) + " " +
         p["ChName"] + " " + p["Title"] + "\n"
   if ret == ""
-    ret = "今日はありません:fearful:"
+    ret = "今日はありません．" + env.random(env.SAD) + ":fearful:"
+  else
+    ret += env.random(env.FUN)
   return ret
 
-module.exports=(robot)->
-  sendDM = (message) ->
-    robot.send {room: user}, message
-    return 0
+show_on_air = (robot) ->
+  data = JSON.parse(fs.readFileSync env.ANIMEFILE)
+  d = Math.floor((new Date()).getTime() / 1000)
+  for p in data["items"]
+    e = p["StTime"]
+    f = p["EdTime"]
+    if f - d >= 0 && d - e >= 0
+      ret=""
+      if p["Count"]?
+        ret = "ただいま " + p["ChName"] + "で「" + p["Title"] +
+          '」が放送中であります!' + env.random(env.FUN)
+      else
+        ret = "ただいま"  + p["ChName"] + "で「" + p["Title"] + '」#' + p["Count"] +
+          "が放送中であります!" + env.random(env.FUN)
+      robot.send {room: env.USER}, ret
 
-  robot.hear /today anime|今日の番組/i, (r) ->
+module.exports=(robot)->
+  robot.hear /anime$/i, (r) ->
+    show_on_air()
+    r.send "今日の番組を知りたいときは `anime today|今日の番組` を，" +
+      "番組表一覧がほしいときは `anime list|番組表` って言ってくださいねー．"
+  robot.hear /anime today|今日の番組/i, (r) ->
+    show_on_air(robot)
     r.send todaysanime()
 
   robot.hear /anime list|番組表/i, (r) ->
-    data = JSON.parse(fs.readFileSync animefile)
+    show_on_air(robot)
+    data = JSON.parse(fs.readFileSync env.ANIMEFILE)
     ret = ""
     n = 0
     for p in data["items"]
@@ -58,20 +77,24 @@ module.exports=(robot)->
         ret += datetostr(p["StTime"]) + " " + timetostr(p["StTime"]) + " " +
           p["ChName"] + " " + p["Title"] + "#" + p["Count"] + "\n"
       n++
+
+    ret += env.random(env.FUN)
     r.send ret
 
   notify = () ->
-    data = JSON.parse(fs.readFileSync animefile)
+    data = JSON.parse(fs.readFileSync env.ANIMEFILE)
     d = Math.floor((new Date()).getTime() / 1000)
     for p in data["items"]
       e = p["StTime"]
       if e - d > 0 && e - (d + notify_span) <= 0
         ret=""
         if p["Count"]?
-          ret = timetostr(p["StTime"]) + "から" + p["ChName"] + "で「" + p["Title"] + '」が始まります'
+          ret = timetostr(p["StTime"]) + "から" + p["ChName"] + "で「" + 
+            p["Title"] + '」が始まります!' + env.random(env.FUN)
         else
-          ret = timetostr(p["StTime"]) + "から" + p["ChName"] + "で「" + p["Title"] + '」#' + p["Count"] "が始まります"
-        robot.send {room: user}, ret
+          ret = timetostr(p["StTime"]) + "から" + p["ChName"] + "で「" + 
+            p["Title"] + '」#' + p["Count"] "が始まります!" + env.random(env.FUN)
+        robot.send {room: env.USER}, ret
   
   schedule.scheduleJob(String(notify_span) + ' * * * * *', "anime-notify", () =>
     console.log "notify (every " + String(notify_span) " minutes)"
@@ -81,12 +104,8 @@ module.exports=(robot)->
   
   schedule.scheduleJob('30 21 * * * *', 'todays-anime', () =>
     console.log "todays-anime (at 21:30)"
-    sendDM(todaysanime())
-  )
-  schedule.scheduleJob('0 8 * * * *', 'forecast', () =>
-    console.log "forecast (at 08:00)"
-    sendDM(get_forecast())
+    robot.send({room:env.USER}, todaysanime())
   )
 
-  sendDM("起動しました")
+  robot.send({room:env.USER}, "あ、あのぉ、普通二科、2年3組の秋山優花里といいます。えっとぉ、ふつつか者ですが、よろしくおねがいしますっ！")
 

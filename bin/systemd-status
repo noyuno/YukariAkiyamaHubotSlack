@@ -1,0 +1,42 @@
+#!/bin/bash -e
+
+# This script requires root privilege.
+
+service()
+{
+    user=noyuno
+    ret=/var/slack/out/systemd-status
+    services=(
+        anime-ical
+        anime-json
+        bluetooth
+        cron
+        fcgiwrap
+        gitbucket
+        jmaws
+        netdata
+        nginx
+        nmbd
+        ntp
+        php5-fpm
+        postgresql
+        showterm
+        slack
+        smbd
+        ssh
+        ufw
+        )
+    
+    mkdir -p $(dirname $ret)
+    touch $ret
+    chown -R $USER.$USER $(dirname $ret)
+    (
+    for service in ${services[@]}; do
+        echo -n $(sudo systemctl is-failed "$service") &&:
+        echo " $service"
+    done
+    ) >$ret
+}
+
+service
+
