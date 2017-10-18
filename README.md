@@ -5,7 +5,9 @@
 
 [hubot]: http://hubot.github.com
 
-## インストール
+![slack](https://raw.githubusercontent.com/noyuno/YukariAkiyamaHubotSlack/master/slack.png)
+
+## 1.インストール
 
     $ sudo mkdir -p /var/slack
 	$ sudo chown user.user $_
@@ -15,7 +17,7 @@
 	$ slack_systemd
 	$ systemd_status_cron
 
-## ローカル上で実行
+## 2.ローカル上で実行
 
 ローカル上で実行するには，次のコマンドを入力します．
 
@@ -29,9 +31,9 @@ You'll see some start up output and a prompt:
     pi> こんにちは
     pi> こんにちは！今日の戦車は「Ⅳ号戦車D型改(F2型仕様)」
 
-## 設定
+## 3.設定
 
-### サービス化
+### 3.1.サービス化
 
 サービス化をするため，今回はSystemdを使います．
 なお終了したときは10秒後に再起動させるようにしています．
@@ -39,7 +41,7 @@ You'll see some start up output and a prompt:
 	$ source install.sh
 	$ slack_systemd
 
-### Slack
+### 3.2.Slack
 
 Slackと連携するには次の変数を`secret/token`に設定する必要があります．
 
@@ -50,7 +52,7 @@ Slackと連携するには次の変数を`secret/token`に設定する必要が�
 次に，`script/env.coffee`の`USER`を`https://slack.com/api/users.list?token=xxxx`に
 アクセスして取得し，変更します．
 
-### サーバの状況
+### 3.3.サーバの状況
 
 Systemdサービスが正常に動いているかを確認します．
 `systemctl`は`root`権限が必要なため，
@@ -67,7 +69,7 @@ Hubotサーバはそのファイルの変更を見て，動いていないサー
 サービスの監視は`bin/systemd-status`の`services`の中のサービスのみ行います．
 また，サービスをHubotから制御することはできません．
 
-### アニメ番組表
+### 3.4.アニメ番組表
 
 アニメ番組表を取得するため，[しょぼいカレンダー](cal.syoboi.jp)に登録します．
 JSONファイルのURL`src`は
@@ -84,7 +86,7 @@ JSONファイルのURL`src`は
 
 最後にJSONファイルの場所を `script/env.coffee`の`ANIMEFILE`に設定します．
 
-## Slackでチャット
+## 3.5.Slackでチャット
 
 次のコマンドが使えます．コマンド出力の後の言葉はランダムです．
 
@@ -98,6 +100,4 @@ JSONファイルのURL`src`は
 
 - アニメ番組が始まる10分前から直前までに通知
 - 10分ごとにサービス状態を確認して，`active`でなければ通知
-
-![slack](https://raw.githubusercontent.com/noyuno/YukariAkiyamaHubotSlack/master/slack.png)
 
