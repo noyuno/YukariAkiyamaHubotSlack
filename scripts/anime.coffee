@@ -2,7 +2,7 @@ fs = require 'fs'
 schedule = require 'node-schedule'
 
 animefile = "/var/www/html/data/anime.json"
-notify_span = 60 * 15
+notify_span = 60 * 10
 
 # https://slack.com/api/users.list?token=xxxx
 user = "U7LMRS8QP"
@@ -51,8 +51,12 @@ module.exports=(robot)->
     for p in data["items"]
       if n > 20
         break
-      ret += datetostr(p["StTime"]) + " " + timetostr(p["StTime"]) + " " +
-        p["ChName"] + " " + p["Title"] + "\n"
+      if p["Count"]?
+        ret += datetostr(p["StTime"]) + " " + timetostr(p["StTime"]) + " " +
+          p["ChName"] + " " + p["Title"] + "\n"
+      else
+        ret += datetostr(p["StTime"]) + " " + timetostr(p["StTime"]) + " " +
+          p["ChName"] + " " + p["Title"] + "#" + p["Count"] + "\n"
       n++
     r.send ret
 
@@ -62,7 +66,11 @@ module.exports=(robot)->
     for p in data["items"]
       e = p["StTime"]
       if e - d > 0 && e - (d + notify_span) <= 0
-        ret += "まもなく，" + p["ChName"] + "で「" + p["Title"] + '」#' + p["Count"] "が始まります"
+        ret=""
+        if p["Count"]?
+          ret = timetostr(p["StTime"]) + "から" + p["ChName"] + "で「" + p["Title"] + '」が始まります'
+        else
+          ret = timetostr(p["StTime"]) + "から" + p["ChName"] + "で「" + p["Title"] + '」#' + p["Count"] "が始まります"
         robot.send {room: user}, ret
   
   schedule.scheduleJob(String(notify_span) + ' * * * * *', "anime-notify", () =>
