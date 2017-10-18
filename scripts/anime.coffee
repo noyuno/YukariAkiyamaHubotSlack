@@ -54,13 +54,19 @@ show_on_air = (robot) ->
       robot.send {room: env.USER}, ret
 
 module.exports=(robot)->
+  send = (r, text) ->
+    unless r?
+      robot.send({room:env.USER}, text)
+    else
+      r.send(text)
+
   robot.hear /anime$/i, (r) ->
     show_on_air()
-    r.send "今日の番組を知りたいときは `anime today|今日の番組` を，" +
+    send r, "今日の番組を知りたいときは `anime today|今日の番組` を，" +
       "番組表一覧がほしいときは `anime list|番組表` って言ってくださいねー．"
   robot.hear /anime today|今日の番組/i, (r) ->
     show_on_air(robot)
-    r.send todaysanime()
+    send r, todaysanime()
 
   robot.hear /anime list|番組表/i, (r) ->
     show_on_air(robot)
@@ -79,7 +85,7 @@ module.exports=(robot)->
       n++
 
     ret += env.random(env.FUN)
-    r.send ret
+    send r, ret
 
   notify = () ->
     data = JSON.parse(fs.readFileSync env.ANIMEFILE)
@@ -94,7 +100,7 @@ module.exports=(robot)->
         else
           ret = timetostr(p["StTime"]) + "から" + p["ChName"] + "で「" + 
             p["Title"] + '」#' + p["Count"] "が始まります!" + env.random(env.FUN)
-        robot.send {room: env.USER}, ret
+        send null, ret
   
   schedule.scheduleJob(String(notify_span) + ' * * * * *', "anime-notify", () =>
     console.log "notify (every " + String(notify_span) " minutes)"
@@ -104,8 +110,8 @@ module.exports=(robot)->
   
   schedule.scheduleJob('30 21 * * * *', 'todays-anime', () =>
     console.log "todays-anime (at 21:30)"
-    robot.send({room:env.USER}, todaysanime())
+    send null, todaysanime()
   )
 
-  robot.send({room:env.USER}, "あ、あの、普通二科、2年3組の秋山優花里といいます。えっと、不束者ですが、よろしくおねがいします！")
+  send null,  "あ、あの、普通二科、2年3組の秋山優花里といいます。えっと、不束者ですが、よろしくおねがいします！"
 

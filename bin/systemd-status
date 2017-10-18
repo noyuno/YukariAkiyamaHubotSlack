@@ -29,7 +29,7 @@ service()
     
     mkdir -p $(dirname $ret)
     touch $ret
-    chown -R $USER.$USER $(dirname $ret)
+    chown -R $user.$user $(dirname $ret)
     (
     for service in ${services[@]}; do
         echo -n $(sudo systemctl is-failed "$service") &&:
