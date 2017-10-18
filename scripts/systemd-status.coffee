@@ -26,8 +26,8 @@ module.exports=(robot)->
     for line in (f + '').split("\n")
       a = line.split(" ")
       if line != "" && (sv == "" || sv == a[1]) && (!line.startsWith("active"))
-        robot.send({room:env.USER}, "はぁ...大変な事になりました...危機的状況です...！" +
-          "うちの" + a[1] + "、" + a[0] + "なのです～。")
+        robot.send({room:env.USER}, "はぁ..大変な事になりました..危機的状況です.." +
+          "うちの" + a[1] + "、" + a[0] + "なのです～．")
         errnum += 1
       if sv == a[1]
         robot.send({room:env.USER}, "問題ありません! " + env.random(env.FUN))

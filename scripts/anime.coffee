@@ -107,5 +107,5 @@ module.exports=(robot)->
     robot.send({room:env.USER}, todaysanime())
   )
 
-  robot.send({room:env.USER}, "あ、あのぉ、普通二科、2年3組の秋山優花里といいます。えっとぉ、ふつつか者ですが、よろしくおねがいしますっ！")
+  robot.send({room:env.USER}, "あ、あの、普通二科、2年3組の秋山優花里といいます。えっと、不束者ですが、よろしくおねがいします！")
 
