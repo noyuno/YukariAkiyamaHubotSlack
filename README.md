@@ -1,4 +1,4 @@
-# pi
+# YukariAkiyamaHubotSlack
 
 [Hubot][hubot] フレームワーク上で実現されたチャットボット．
 秋山優花里殿がアニメ番組情報やサーバ状況を随時報告してくれます．
