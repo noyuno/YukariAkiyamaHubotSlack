@@ -13,9 +13,8 @@
 	$ sudo chown user.user $_
     $ git clone https://github.com/noyuno/YukariAkiyamaHubotSlack.git $_
 	$ cd $_
-	$ source install.sh
-	$ slack_systemd
-	$ systemd_status_cron
+	$ bash install.sh systemd
+	$ bash install.sh status
 
 ## 2. ローカル上で実行
 
@@ -38,8 +37,7 @@ You'll see some start up output and a prompt:
 サービス化をするため，今回はSystemdを使います．
 なお異常終了したときは10秒後に再起動させるようにしています．
 
-	$ source install.sh
-	$ slack_systemd
+	$ bash install.sh systemd
 
 ### 3.2. Slack
 
@@ -60,14 +58,15 @@ Systemdサービスが正常に動いているかを確認します．
 
 次のコマンドで`bin/systemd-status`を登録します．
 
-	$ source install.sh
-	$ systemd_status_cron
+	$ bash install.sh status
 
 `bin/systemd-status`の出力先は`out/systemd-status`で，
 Hubotサーバはそのファイルの変更を見て，動いていないサービスがあればチャットで知らせます．
 
 サービスの監視は`bin/systemd-status`の`services`の中のサービスのみ行います．
 また，サービスをHubotから制御することはできません．
+また，サービスの確認には5分間隔で実行しているため，例えば`sudo systemctl start slack`
+をしたのに起動直後Slackがinactiveとして通知されます．
 
 ### 3.4. アニメ番組表
 
