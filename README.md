@@ -1,7 +1,7 @@
 # YukariAkiyamaHubotSlack
 
 [Hubot][hubot] フレームワーク上で実現されたSlackチャットボット．
-秋山優花里殿がアニメ番組情報やサーバ状況を随時報告してくれます．
+秋山優花里殿がアニメ番組情報やサーバ状況，降雨状況を随時報告してくれます．
 
 [hubot]: http://hubot.github.com
 
@@ -36,7 +36,7 @@ You'll see some start up output and a prompt:
 ### 3.1. サービス化
 
 サービス化をするため，今回はSystemdを使います．
-なお終了したときは10秒後に再起動させるようにしています．
+なお異常終了したときは10秒後に再起動させるようにしています．
 
 	$ source install.sh
 	$ slack_systemd
@@ -71,7 +71,7 @@ Hubotサーバはそのファイルの変更を見て，動いていないサー
 
 ### 3.4. アニメ番組表
 
-アニメ番組表を取得するため，[しょぼいカレンダー](cal.syoboi.jp)に登録します．
+アニメ番組表を取得するため，[しょぼいカレンダー](http://cal.syoboi.jp)に登録します．
 JSONファイルのURL`src`は
 
     src='http://cal.syoboi.jp/rss2.php?usr='$USER'&filter=0&count=1000&days=14&titlefmt=%24(StTime)%01%24(Mark)%24(MarkW)%01%24(ShortTitle)%01%24(SubTitleB)%01%24(ChName)&alt=json'
@@ -86,7 +86,19 @@ JSONファイルのURL`src`は
 
 最後にJSONファイルの場所を `script/env.coffee`の`ANIMEFILE`に設定します．
 
-## 4. Slackでチャット
+## 4. 降雨状況
+
+YOLPを使ってますので，[新しいアプリケーションを開発](https://e.developer.yahoo.co.jp/register)
+で「クライアントサイド（Yahoo! ID連携v1）」を選び登録します．
+発行されたアプリケーションIDを`secret/token`に`YAHOO_APPID=abc..`の形式で設定します．
+
+次に，`script/env.coffee`の`COORDINATES`に次の形式で座標を設定します．
+
+    @COORDINATES: {\
+        "愛知": "137.123456,34.123456"
+    }
+
+## 5. Slackでチャット
 
 次のコマンドが使えます．コマンド出力の後の言葉はランダムです．
 
@@ -95,10 +107,17 @@ JSONファイルのURL`src`は
 - `status SERVICE`: SERVICEの状況を取得する（ただし，`services`に限る）
 - `番組表|anime list`: アニメ番組の一覧を表示する．
 - `今日の番組|anime today`: 今日のアニメ番組表の一覧を表示する
+- `天気|weather|forecast`: 現在及び今後の降雨状況を表示する
 - `こんにちは|hello|hi`: 挨拶をする
 
-また，自動的にダイレクトメッセージが届きます
+また，自動的に以下のダイレクトメッセージが届きます
 
-- アニメ番組が始まる10分前から直前までに通知
-- 10分ごとにサービス状態を確認して，`active`でなければ通知
+- アニメ番組が始まる10分前から5分前までに通知
+- 5分ごとにサービス状態を確認して，`active`でなければ通知
+- 5分ごとに今後の降雨状況を確認して，変化（雨が降ってきたり，雨が止んだり）があった時に通知
+
+また，起動時に必要に応じて以下の情報を通知します．
+
+- サービス状態を確認して，`active`でなければ通知
+- 今後の降雨状況を確認して，変化（雨が降ってきたり，雨が止んだり）があった時に通知
 

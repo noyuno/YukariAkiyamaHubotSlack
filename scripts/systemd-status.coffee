@@ -45,7 +45,6 @@ module.exports=(robot)->
             "うちの" + a[1] + "、" + a[0] + "なのです～．")
           errnum += 1
           if flag && !(a[1] in service_flag)
-            console.log("push " + a[1])
             service_flag.push(a[1])
 
         if sv == a[1] && line.startsWith("active")

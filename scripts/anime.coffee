@@ -5,7 +5,7 @@ fs = require 'fs'
 schedule = require 'node-schedule'
 env = require './env.coffee'
 
-notify_span = 60 * 10
+anime_flag = []
 
 datetostr = (ux) ->
   d = new Date( ux * 1000 )
@@ -92,18 +92,20 @@ module.exports=(robot)->
     d = Math.floor((new Date()).getTime() / 1000)
     for p in data["items"]
       e = p["StTime"]
-      if e - d > 0 && e - (d + notify_span) <= 0
-        ret=""
-        if p["Count"]?
-          ret = timetostr(p["StTime"]) + "から" + p["ChName"] + "で「" + 
-            p["Title"] + '」が始まります!' + env.random(env.FUN)
-        else
-          ret = timetostr(p["StTime"]) + "から" + p["ChName"] + "で「" + 
-            p["Title"] + '」#' + p["Count"] "が始まります!" + env.random(env.FUN)
-        send null, ret
+      if e - d > 0 && e - (d + env.NOTIFY_INTERVAL) <= 0
+        if !(p["PID"] in notify_flag)
+          ret=""
+          if p["Count"]?
+            ret = timetostr(p["StTime"]) + "から" + p["ChName"] + "で「" + 
+              p["Title"] + '」が始まります!' + env.random(env.FUN)
+          else
+            ret = timetostr(p["StTime"]) + "から" + p["ChName"] + "で「" + 
+              p["Title"] + '」#' + p["Count"] "が始まります!" + env.random(env.FUN)
+          send null, ret
+          notify_flag.append(p["PID"])
   
-  schedule.scheduleJob(String(notify_span) + ' * * * * *', "anime-notify", () =>
-    console.log "notify (every " + String(notify_span) " minutes)"
+  schedule.scheduleJob(String(env.NOTIFY_INTERVAL) + ' * * * * *', "anime-notify", () =>
+    console.log "notify (every " + String(env.NOTIFY_INTERVAL) " minutes)"
     notify()
   )
   notify()

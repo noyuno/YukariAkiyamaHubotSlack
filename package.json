@@ -19,8 +19,8 @@
     "hubot-scripts": "^2.17.2",
     "hubot-shipit": "^0.2.1",
     "hubot-slack": "^4.4.0",
-    "node-schedule": "*", 
-    "hubot-gohan": "*", 
+    "node-schedule": "*",
+    "hubot-gohan": "*",
     "weather-yahoo-jp": "*"
   },
   "engines": {
