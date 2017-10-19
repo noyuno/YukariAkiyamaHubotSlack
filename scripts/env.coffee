@@ -10,6 +10,7 @@ class env
   }
 
   @NOTIFY_INTERVAL: 60 * 5
+  @ANIME_NOTIFY_TIMING: 60 * 30
 
   @TANK: [\
     "巡航戦車A41センチュリオン",

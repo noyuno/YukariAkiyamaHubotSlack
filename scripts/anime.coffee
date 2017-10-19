@@ -5,7 +5,7 @@ fs = require 'fs'
 schedule = require 'node-schedule'
 env = require './env.coffee'
 
-anime_flag = []
+notify_flag = []
 
 datetostr = (ux) ->
   d = new Date( ux * 1000 )
@@ -62,14 +62,17 @@ module.exports=(robot)->
 
   robot.hear /anime$/i, (r) ->
     show_on_air()
+    notify(true)
     send r, "今日の番組を知りたいときは `anime today|今日の番組` を，" +
       "番組表一覧がほしいときは `anime list|番組表` って言ってくださいねー．"
   robot.hear /anime today|今日の番組/i, (r) ->
     show_on_air(robot)
+    notify(true)
     send r, todaysanime()
 
   robot.hear /anime list|番組表/i, (r) ->
     show_on_air(robot)
+    notify(true)
     data = JSON.parse(fs.readFileSync env.ANIMEFILE)
     ret = ""
     n = 0
@@ -87,13 +90,13 @@ module.exports=(robot)->
     ret += env.random(env.FUN)
     send r, ret
 
-  notify = () ->
+  notify = (all) ->
     data = JSON.parse(fs.readFileSync env.ANIMEFILE)
     d = Math.floor((new Date()).getTime() / 1000)
     for p in data["items"]
       e = p["StTime"]
-      if e - d > 0 && e - (d + env.NOTIFY_INTERVAL) <= 0
-        if !(p["PID"] in notify_flag)
+      if e - d > 0 && e - (d + env.ANIME_NOTIFY_TIMING) <= 0
+        if !(p["PID"] in notify_flag) || all
           ret=""
           if p["Count"]?
             ret = timetostr(p["StTime"]) + "から" + p["ChName"] + "で「" + 
@@ -101,14 +104,18 @@ module.exports=(robot)->
           else
             ret = timetostr(p["StTime"]) + "から" + p["ChName"] + "で「" + 
               p["Title"] + '」#' + p["Count"] "が始まります!" + env.random(env.FUN)
+          console.log ret
           send null, ret
-          notify_flag.append(p["PID"])
+          notify_flag.push(p["PID"])
+        else
+          console.log "matched " + ret
   
   schedule.scheduleJob(String(env.NOTIFY_INTERVAL) + ' * * * * *', "anime-notify", () =>
     console.log "notify (every " + String(env.NOTIFY_INTERVAL) " minutes)"
-    notify()
+    notify(false)
   )
-  notify()
+  show_on_air robot
+  notify(false)
   
   schedule.scheduleJob('30 21 * * * *', 'todays-anime', () =>
     console.log "todays-anime (at 21:30)"
