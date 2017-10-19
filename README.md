@@ -22,22 +22,27 @@
 
     $ bin/hubot
 
-You'll see some start up output and a prompt:
 起動時の出力がたくさん出ますが，気にせず挨拶をしましょう．
 
-    [Sat Feb 28 2015 12:38:27 GMT+0000 (GMT)] INFO Using default redis on localhost:6379
-    pi> あ、あのぉ、普通二科、2年3組の秋山優花里といいます。えっとぉ、ふつつか者ですが、よろしくおねがいしますっ！
-    pi> こんにちは
-    pi> こんにちは！今日の戦車は「Ⅳ号戦車D型改(F2型仕様)」
+    yukari> あ、あの、普通二科、2年3組の秋山優花里といいます。えっと、不束者ですが、よろしくおねがいします！
+    [Thu Oct 19 2017 19:52:22 GMT+0900 (JST)] WARNING A script has tried registering a HTTP route while the HTTP server is disabled with --disabled-httpd.
+    [Thu Oct 19 2017 19:52:23 GMT+0900 (JST)] INFO hubot-redis-brain: Using default redis on localhost:6379
+    愛知ではもうすぐ雨が降ってきます(0)..
+    yukari> こんにちは
+    こんにちは！今日の戦車は「Ⅳ号戦車D型改(F2型仕様)」
+    yukari> 天気を教えて
+    yukari> 愛知ではもうすぐ雨が降ってきます(0)..
+
 
 ## 3. 設定
 
 ### 3.1. サービス化
 
 サービス化をするため，今回はSystemdを使います．
+`slack`として登録します．
 なお異常終了したときは10秒後に再起動させるようにしています．
 
-	$ bash install.sh systemd
+    $ bash install.sh systemd
 
 ### 3.2. Slack
 
@@ -58,7 +63,7 @@ Systemdサービスが正常に動いているかを確認します．
 
 次のコマンドで`bin/systemd-status`を登録します．
 
-	$ bash install.sh status
+    $ bash install.sh status
 
 `bin/systemd-status`の出力先は`out/systemd-status`で，
 Hubotサーバはそのファイルの変更を見て，動いていないサービスがあればチャットで知らせます．
@@ -86,6 +91,9 @@ JSONファイルのURL`src`は
 最後にJSONファイルの場所を `script/env.coffee`の`ANIMEFILE`に設定します．
 
 ## 4. 降雨状況
+
+降雨状況を問い合わせたり，ある場所の降雨の変化
+（もうすぐ雨が降ってきたり，雨が止んだり）があった時に通知することができます．
 
 YOLPを使ってますので，[新しいアプリケーションを開発](https://e.developer.yahoo.co.jp/register)
 で「クライアントサイド（Yahoo! ID連携v1）」を選び登録します．

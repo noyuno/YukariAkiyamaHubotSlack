@@ -1,7 +1,6 @@
-#!/bin/sh
+#!/bin/bash -e
 
-set -e
-
+base=/var/slack
 export PATH="node_modules/.bin:node_modules/hubot/node_modules/.bin:$PATH"
-exec node_modules/.bin/hubot -d --name "pi" "$@"
+eval $(cat $base/secret/token) exec node_modules/.bin/hubot -d --name "yukari" "$@"
 

@@ -1,5 +1,5 @@
 #!/bin/bash -e
 
 base=/var/slack
-eval PORT=8082 $(cat $base/secret/token) $base/bin/hubot -a slack
+exec $base/bin/hubot -a slack
 

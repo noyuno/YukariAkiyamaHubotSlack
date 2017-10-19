@@ -115,5 +115,3 @@ module.exports=(robot)->
     send null, todaysanime()
   )
 
-  send null,  "あ、あの、普通二科、2年3組の秋山優花里といいます。えっと、不束者ですが、よろしくおねがいします！"
-

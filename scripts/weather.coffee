@@ -33,7 +33,7 @@ module.exports=(robot)->
         if w.observation.rain > 0
           if w.forecast[0].rain > 0
             if all
-              send r, where + "は雨が" + w.observation.rain + "降っていますよ"
+              send r, where + "は雨が降っていますよ(" + w.observation.rain + ")"
               notify_flag[where] == 3
           else
             if all || !(notify_flag[where] == 1)
@@ -46,7 +46,7 @@ module.exports=(robot)->
               notify_flag[where] == 1
           else
             if all || !(notify_flag[where] == 2)
-              send r, where + "ではもうすぐ雨が" + w.forecast[0].rain + "降ってきます.."
+              send r, where + "ではもうすぐ雨が降ってきます(" + w.forecast[0].rain + ").."
               notify_flag[where] == 2
 
   robot.hear /(weather|forecast|天気)/i, (r) ->
