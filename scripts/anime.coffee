@@ -110,7 +110,7 @@ module.exports=(robot)->
         else
           console.log "matched " + ret
   
-  schedule.scheduleJob(String(env.NOTIFY_INTERVAL) + ' * * * * *', "anime-notify", () =>
+  schedule.scheduleJob('*/' + String(env.NOTIFY_INTERVAL) + ' * * * * *', "anime-notify", () =>
     console.log "notify (every " + String(env.NOTIFY_INTERVAL) " minutes)"
     notify(false)
   )

@@ -52,7 +52,7 @@ module.exports=(robot)->
   robot.hear /(weather|forecast|天気)/i, (r) ->
     getWeather r, true
 
-  schedule.scheduleJob(String(env.NOTIFY_INTERVAL) + ' * * * * *', "weather-notify", () =>
+  schedule.scheduleJob('*/' + String(env.NOTIFY_INTERVAL) + ' * * * * *', "weather-notify", () =>
     #console.log "notify (every " + String(env.NOTIFY_INTERVAL) " minutes)"
     getWeather r, false
   )
