@@ -95,7 +95,7 @@ module.exports=(robot)->
     d = Math.floor((new Date()).getTime() / 1000)
     for p in data["items"]
       e = p["StTime"]
-      if e - d > 0 && e - (d + env.ANIME_NOTIFY_TIMING) <= 0
+      if e - d > 0 && e - (d + (env.ANIME_NOTIFY_TIMING * 60)) <= 0
         if !(p["PID"] in notify_flag) || all
           ret=""
           if p["Count"]?
@@ -110,14 +110,14 @@ module.exports=(robot)->
         else
           console.log "matched " + ret
   
-  schedule.scheduleJob('*/' + String(env.NOTIFY_INTERVAL) + ' * * * * *', "anime-notify", () =>
-    console.log "notify (every " + String(env.NOTIFY_INTERVAL) " minutes)"
+  schedule.scheduleJob("*/#{env.NOTIFY_INTERVAL} * * * *", () =>
+    #console.log "anime notify (every #{env.NOTIFY_INTERVAL} minutes)"
     notify(false)
   )
   show_on_air robot
   notify(false)
   
-  schedule.scheduleJob('30 21 * * * *', 'todays-anime', () =>
+  schedule.scheduleJob('30 21 * * *', () =>
     console.log "todays-anime (at 21:30)"
     send null, todaysanime()
   )

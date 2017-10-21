@@ -9,8 +9,9 @@ class env
     "愛知": "137.391528,34.769167"
   }
 
-  @NOTIFY_INTERVAL: 60 * 5
-  @ANIME_NOTIFY_TIMING: 60 * 10
+  # unit is minutes (from 1 to 60)
+  @NOTIFY_INTERVAL: 5
+  @ANIME_NOTIFY_TIMING: 10
 
   @TANK: [\
     "巡航戦車A41センチュリオン",
