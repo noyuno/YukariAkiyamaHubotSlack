@@ -117,8 +117,8 @@ module.exports=(robot)->
   show_on_air robot
   notify(false)
   
-  schedule.scheduleJob('30 21 * * *', () =>
-    console.log "todays-anime (at 21:30)"
+  schedule.scheduleJob('00 22 * * *', () =>
+    #console.log "todays-anime (at 21:30)"
     send null, todaysanime()
   )
 
