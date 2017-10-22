@@ -40,7 +40,7 @@ module.exports=(robot)->
               send r, where + "ではもうすぐ雨が止みます!"
               notify_flag[where] == 1
         else
-          if w.forecast[0].rain == 4
+          if w.forecast[0].rain == 0
             if all
               send r, where + "は雨が降っていません"
               notify_flag[where] == 1
