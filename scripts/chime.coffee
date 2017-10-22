@@ -2,6 +2,7 @@
 #    chime
 gohan = require "hubot-gohan"
 schedule = require 'node-schedule'
+env = require './env.coffee'
 
 module.exports=(robot)->
   send = (r, text) ->
