@@ -8,10 +8,15 @@ class env
   @COORDINATES: {\
     "愛知": "137.391528,34.769167"
   }
+  #@RAINFALL_NOTIFY_THRESHOLD: 2.0
 
   # unit is minutes (from 1 to 60)
-  @NOTIFY_INTERVAL: 5
+  @ANIME_NOTIFY_INTERVAL: 5
   @ANIME_NOTIFY_TIMING: 10
+
+  @WEATHER_NOTIFY_INTERVAL: 10
+  
+  @ENABLE_SHELL: false
 
   @TANK: [\
     "巡航戦車A41センチュリオン",
