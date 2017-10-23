@@ -21,7 +21,7 @@ module.exports=(robot)->
     
   robot.hear /sh (.*)/i, (r) ->
     if !env.ENABLE_SHELL
-      send r, "シェルは現在無効です．有効にするには`env.ENABLE_SHELL=true`にしてください．"
+      send r, "Shell on Slackは現在無効です．有効にするには`env.ENABLE_SHELL=true`にしてください．"
       return
     try
       out = process.execSync(r.match[1], shell="/bin/zsh") + ''
