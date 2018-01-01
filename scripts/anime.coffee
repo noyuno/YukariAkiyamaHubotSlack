@@ -81,10 +81,10 @@ module.exports=(robot)->
         break
       if p["Count"]?
         ret += datetostr(p["StTime"]) + " " + timetostr(p["StTime"]) + " " +
-          p["ChName"] + " " + p["Title"] + "\n"
+          p["ChName"] + " " + p["Title"] + "#" + p["Count"] + "\n"
       else
         ret += datetostr(p["StTime"]) + " " + timetostr(p["StTime"]) + " " +
-          p["ChName"] + " " + p["Title"] + "#" + p["Count"] + "\n"
+          p["ChName"] + " " + p["Title"] + "\n"
       n++
 
     ret += env.random(env.FUN)
@@ -100,10 +100,10 @@ module.exports=(robot)->
           ret=""
           if p["Count"]?
             ret = timetostr(p["StTime"]) + "から" + p["ChName"] + "で「" + 
-              p["Title"] + '」が始まります!' + env.random(env.FUN)
+              p["Title"] + '」#' + p["Count"] "が始まります!" + env.random(env.FUN)
           else
             ret = timetostr(p["StTime"]) + "から" + p["ChName"] + "で「" + 
-              p["Title"] + '」#' + p["Count"] "が始まります!" + env.random(env.FUN)
+              p["Title"] + '」が始まります!' + env.random(env.FUN)
           console.log ret
           send null, ret
           notify_flag.push(p["PID"])
