@@ -19,9 +19,9 @@ EOF
     sudo systemctl enable slack
 }
 
-systemd_status_cron() {
+slack_cron() {
     cat << EOF | sudo tee /etc/cron.d/slack
-*/5 * * * * root /var/slack/bin/systemd-status
+*/10 * * * * root /var/slack/bin/systemd-status
 48 19 * * * root /var/slack/bin/apt-upgrade
 EOF
 }
@@ -36,7 +36,7 @@ bash install.sh COMMAND
 
 COMMAND:
     systemd : Add 秋山優花里 bot to Systemd.
-    status : Add 'bin/systemd-status' script to cron
+    cron : Add 'bin/systemd-status' and 'bin/apt-upgrade' script to cron
 EOF
 
     exit 1
@@ -47,7 +47,7 @@ if [ $# -eq 0 ]; then
 fi
 
 case "$1" in
-    status) systemd_status_cron ;;
+    cron) slack_cron ;;
     systemd) slack_systemd ;;
     *) help
 esac

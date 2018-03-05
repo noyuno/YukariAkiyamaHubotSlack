@@ -2,7 +2,7 @@
 
 out=/var/slack/out/upgradable
 apt -qq update
-apt -qq list --upgradable > $out
+apt -qq list --upgradable | cut -d' ' -f1 | cut -d/ -f1 > $out
 chown noyuno.noyuno $out
 chmod 644 $out
 
