@@ -1,0 +1,9 @@
+#!/bin/bash -e
+
+out=/var/slack/out/upgradable
+apt -qq update
+apt -qq list --upgradable > $out
+chown noyuno.noyuno $out
+chmod 644 $out
+
+

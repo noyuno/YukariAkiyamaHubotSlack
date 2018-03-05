@@ -45,7 +45,7 @@ show_on_air = (robot) ->
     f = p["EdTime"]
     if f - d >= 0 && d - e >= 0
       ret=""
-      if p["Count"]?
+      unless p["Count"]?
         ret = "ただいま " + p["ChName"] + "で「" + p["Title"] +
           '」が放送中であります!' + env.random(env.FUN)
       else
@@ -96,6 +96,7 @@ module.exports=(robot)->
     for p in data["items"]
       e = p["StTime"]
       if e - d > 0 && e - (d + (env.ANIME_NOTIFY_TIMING * 60)) <= 0
+        #console.log "soon start"
         if !(p["PID"] in notify_flag) || all
           ret=""
           if p["Count"]?
@@ -108,7 +109,7 @@ module.exports=(robot)->
           send null, ret
           notify_flag.push(p["PID"])
         else
-          console.log "matched " + ret
+          #console.log "already sent: " + ret
   
   schedule.scheduleJob("*/#{env.ANIME_NOTIFY_INTERVAL} * * * *", () =>
     #console.log "anime notify (every #{env.ANIME_NOTIFY_INTERVAL} minutes)"
@@ -118,7 +119,7 @@ module.exports=(robot)->
   notify(false)
   
   schedule.scheduleJob('00 22 * * *', () =>
-    #console.log "todays-anime (at 21:30)"
+    #console.log "todays-anime (at 22:00)"
     send null, todaysanime()
   )
 

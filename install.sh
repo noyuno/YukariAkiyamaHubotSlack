@@ -20,8 +20,9 @@ EOF
 }
 
 systemd_status_cron() {
-    cat << EOF | sudo tee /etc/cron.d/systemd-status
+    cat << EOF | sudo tee /etc/cron.d/slack
 */5 * * * * root /var/slack/bin/systemd-status
+48 19 * * * root /var/slack/bin/apt-upgrade
 EOF
 }
 

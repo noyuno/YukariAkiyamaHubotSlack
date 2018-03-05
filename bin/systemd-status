@@ -13,6 +13,7 @@ service()
         cron
         fcgiwrap
         gitbucket
+        humidity
         jmaws
         netdata
         nginx
