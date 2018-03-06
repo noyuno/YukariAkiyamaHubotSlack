@@ -99,7 +99,7 @@ module.exports=(robot)->
         #console.log "soon start"
         if !(p["PID"] in notify_flag) || all
           ret=""
-          if p["Count"]?
+          unless p["Count"]?
             ret = timetostr(p["StTime"]) + "から" + p["ChName"] + "で「" + 
               p["Title"] + '」#' + p["Count"] "が始まります!" + env.random(env.FUN)
           else

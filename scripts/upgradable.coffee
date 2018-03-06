@@ -8,6 +8,7 @@ env = require './env.coffee'
 upgradable_out = 'out/upgradable'
 latest="すべて最新です"
 nupgradable="個のパッケージが更新できます"
+lastupgradable=0
 
 module.exports=(robot)->
   send = (r, text) ->
@@ -32,8 +33,9 @@ module.exports=(robot)->
     for line in (f + '').split("\n")
       if line != ""
         length += 1
-    if length > 0
+    if length > 0 && lastupgradable != length
       send(r, length + nupgradable)
+      lastupgradable=length
     return length
 
   upgradable_item = (r, sv, flag) ->
