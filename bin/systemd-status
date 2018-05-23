@@ -22,11 +22,12 @@ service()
         php5-fpm
         postgresql
         rsyslog
-        showterm
         slack
         smbd
         ssh
         ufw
+        pleroma
+        pleromabot
         )
     
     mkdir -p $(dirname $ret)

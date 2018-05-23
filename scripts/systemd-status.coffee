@@ -54,7 +54,8 @@ module.exports=(robot)->
           if flag
             service_flag = service_flag.filter((elem, index, array) ->
               return !(a[1] == elem))
-    send(r, "はぁ..大変な事になりました..危機的状況です.." +
+    if out isnt ""
+      send(r, "はぁ..大変な事になりました..危機的状況です.." +
       "うちの" + out + "なのです～．")
     return errnum
   

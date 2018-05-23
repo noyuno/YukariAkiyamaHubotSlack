@@ -27,7 +27,7 @@ module.exports=(robot)->
 
   schedule.scheduleJob('0 7 * * *', () =>
     getWeather(null, false).then (ret)=>
-      r = "おはようございます！"
+      r = "おはようございます！今日の戦車は「"+env.random(env.TANK)+"」"
       if ret?
         r += ret
       robot.send null, r
