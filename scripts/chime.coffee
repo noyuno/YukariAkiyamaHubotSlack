@@ -25,9 +25,19 @@ module.exports=(robot)->
         text += "\n#{res.image}"
       send null, text
 
+  schedule.scheduleJob('0 7 * * *', () =>
+    getWeather(null, false).then (ret)=>
+      r = "おはようございます！"
+      if ret?
+        r += ret
+      robot.send null, r
+  )
   schedule.scheduleJob('0 12 * * *', () =>
-    send null, "お昼です!"
-    eatit
+    getWeather(null, false).then (ret)=>
+      r = "お昼です！"
+      if ret?
+        r += ret
+      robot.send null, r
   )
   schedule.scheduleJob('20 18 * * *', () =>
     send null, "夕ごはんの時間です!"

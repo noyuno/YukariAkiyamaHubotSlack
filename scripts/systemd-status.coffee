@@ -37,12 +37,14 @@ module.exports=(robot)->
   check_output = (r, sv, flag) ->
     f = fs.readFileSync(systemd_out)
     errnum=0
+    out = ""
     for line in (f + '').split("\n")
       a = line.split(" ")
       if line != ""
         if (sv == "" || sv == a[1]) && !line.startsWith("active") && (!flag || !(a[1] in service_flag))
-          send(r, "はぁ..大変な事になりました..危機的状況です.." +
-            "うちの" + a[1] + "、" + a[0] + "なのです～．")
+          if out isnt ""
+            out += "で，"
+          out += a[1]+"が"+a[0]
           errnum += 1
           if flag && !(a[1] in service_flag)
             service_flag.push(a[1])
@@ -52,6 +54,8 @@ module.exports=(robot)->
           if flag
             service_flag = service_flag.filter((elem, index, array) ->
               return !(a[1] == elem))
+    send(r, "はぁ..大変な事になりました..危機的状況です.." +
+      "うちの" + out + "なのです～．")
     return errnum
   
   check_outall = (r) ->

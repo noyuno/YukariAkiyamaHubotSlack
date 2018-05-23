@@ -27,37 +27,47 @@ module.exports=(robot)->
       r.send(text)
 
   getWeather = (r, all) ->
-    yolp.getWeather( { coordinates: env.COORDINATES, z:12 }).then (data) ->
+    return yolp.getWeather( { coordinates: env.COORDINATES, z:12 }).then (data) ->
+      ret = ""
       for where of data
         w = data[where]
         if w.observation.rain > 0
           if w.forecast[0].rain > 0
             if all
-              send r, where + "は雨が降っていますよ(降水強度" + 
+              ret += where + "は雨が降っていますよ(降水強度" + 
                 w.observation.rain + "mm/h)"
               notify_flag[where] = 3
           else
             if all || !(notify_flag[where] == 4)
-              send r, where + "ではもうすぐ雨が止みます!"
+              ret += where + "ではもうすぐ雨が止みます!"
               notify_flag[where] = 4
         else
           if w.forecast[0].rain == 0
             if all
-              send r, where + "は雨が降っていません"
+              ret += where + "は雨が降っていません"
               notify_flag[where] = 1
           else
             if all || !(notify_flag[where] == 2)
-              send r, where + "ではもうすぐ雨が降ってきます(降水強度" +
+              ret += where + "ではもうすぐ雨が降ってきます(降水強度" +
                 w.forecast[0].rain + "mm/h).."
               notify_flag[where] = 2
+      if ret is ""
+        ret = null
+      return ret
 
   robot.hear /(weather|forecast|天気)/i, (r) ->
-    getWeather r, true
+    getWeather(null, true).then (ret)=>
+      if ret?
+        r.send ret
 
   schedule.scheduleJob("*/#{env.WEATHER_NOTIFY_INTERVAL} * * * *", () =>
     #console.log "weather notify (every #{env.WEATHER_NOTIFY_INTERVAL} minutes)"
-    getWeather null, false
+    getWeather(null, false).then (ret)=>
+      if ret?
+        robot.send null, ret
   )
 
-  getWeather null, false
+  getWeather(null, false).then (ret)=>
+    if ret?
+      robot.send null, ret
 
