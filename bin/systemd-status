@@ -20,14 +20,16 @@ service()
         nmbd
         ntp
         php5-fpm
+        pleroma
+        pleromabot
         postgresql
+        redis
         rsyslog
         slack
         smbd
+        spindown
         ssh
         ufw
-        pleroma
-        pleromabot
         )
     
     mkdir -p $(dirname $ret)
