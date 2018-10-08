@@ -21,7 +21,8 @@
     "hubot-slack": "^4.4.0",
     "node-schedule": "*",
     "hubot-gohan": "*",
-    "weather-yahoo-jp": "*"
+    "weather-yahoo-jp": "*", 
+    "chokidar": "*"
   },
   "engines": {
     "node": "0.10.x"

@@ -61,7 +61,7 @@ module.exports=(robot)->
       r.send(text)
 
   robot.hear /anime$/i, (r) ->
-    show_on_air()
+    show_on_air(robot)
     notify(true)
     send r, "今日の番組を知りたいときは `anime today|今日の番組` を，" +
       "番組表一覧がほしいときは `anime list|番組表` って言ってくださいねー．"
