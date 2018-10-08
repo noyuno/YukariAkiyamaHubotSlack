@@ -2,8 +2,6 @@
 #   env
 
 class env
-  # https://slack.com/api/users.list?token=xxxx
-  @USER: "U7LMRS8QP"
   @ANIMEFILE: "/var/www/html/data/anime.json"
   @COORDINATES: {\
     "愛知": "137.391528,34.769167"

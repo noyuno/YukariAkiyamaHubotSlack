@@ -22,7 +22,7 @@ timetostr = (ux) ->
 module.exports=(robot)->
   send = (r, text) ->
     unless r?
-      robot.send({room:env.USER}, text)
+      robot.send({room:process.env.HUBOT_SLACK_USERID}, text)
     else
       r.send(text)
 

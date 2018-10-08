@@ -1,13 +1,13 @@
 # Description:
 #   hello
 
-process = require "child_process"
+cprocess = require "child_process"
 env = require './env.coffee'
 
 module.exports=(robot)->
   send = (r, text) ->
     unless r?
-      robot.send({room:env.USER}, text)
+      robot.send({room:process.env.HUBOT_SLACK_USERID}, text)
     else
       r.send(text)
 
@@ -15,7 +15,7 @@ module.exports=(robot)->
     send r, "こんにちは！今日の戦車は「" + env.random(env.TANK) + "」"
 
   robot.hear /uptime/i, (r) ->
-    uptime = process.execSync("uptime") + ''
+    uptime = cprocess.execSync("uptime") + ''
     uptime = uptime.replace /\n/, ""
     send r, uptime
     
@@ -24,7 +24,7 @@ module.exports=(robot)->
       send r, "Shell on Slackは現在無効です．有効にするには`env.ENABLE_SHELL=true`にしてください．"
       return
     try
-      out = process.execSync(r.match[1], shell="/bin/zsh") + ''
+      out = cprocess.execSync(r.match[1], shell="/bin/zsh") + ''
       send r, out
     catch err
       send r, "#{err}"
