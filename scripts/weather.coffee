@@ -3,7 +3,8 @@
 
 schedule = require 'node-schedule'
 weather_yahoo_jp = require "weather-yahoo-jp"
-yolp = new weather_yahoo_jp.Yolp(process.env.YAHOO_APPID)
+if process.env.YAHOO_APPID?
+  yolp = new weather_yahoo_jp.Yolp(process.env.YAHOO_APPID)
 env = require './env.coffee'
 notify_flag = { }
 
@@ -55,19 +56,20 @@ module.exports=(robot)->
         ret = null
       return ret
 
-  robot.hear /(weather|forecast|天気)/i, (r) ->
-    getWeather(null, true).then (ret)=>
-      if ret?
-        r.send ret
+  if yolp?
+    robot.hear /(weather|forecast|天気)/i, (r) ->
+      getWeather(null, true).then (ret)=>
+        if ret?
+          r.send ret
 
-  schedule.scheduleJob("*/#{env.WEATHER_NOTIFY_INTERVAL} * * * *", () =>
-    #console.log "weather notify (every #{env.WEATHER_NOTIFY_INTERVAL} minutes)"
+    schedule.scheduleJob("*/#{env.WEATHER_NOTIFY_INTERVAL} * * * *", () =>
+      #console.log "weather notify (every #{env.WEATHER_NOTIFY_INTERVAL} minutes)"
+      getWeather(null, false).then (ret)=>
+        if ret?
+          robot.send null, ret
+    )
+
     getWeather(null, false).then (ret)=>
       if ret?
         robot.send null, ret
-  )
-
-  getWeather(null, false).then (ret)=>
-    if ret?
-      robot.send null, ret
 
