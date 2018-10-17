@@ -5,6 +5,23 @@ fs = require 'fs'
 schedule = require 'node-schedule'
 env = require './env.coffee'
 
+unless process.env.ANIME?
+  module.exports=(robot)->
+    send = (r) ->
+      text = "この機能は現在無効中です．`secret/token`に`ANIME=true`を記述してください．"
+      unless r?
+        robot.send({room:process.env.HUBOT_SLACK_USERID}, text)
+      else
+        r.send(text)
+
+    robot.hear /anime$/i, (r) ->
+      send r
+    robot.hear /anime today|今日の番組/i, (r) ->
+      send r
+    robot.hear /anime list|番組表/i, (r) ->
+      send r
+  return
+
 notify_flag = []
 
 datetostr = (ux) ->

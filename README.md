@@ -127,7 +127,8 @@ JSONファイルのURL`src`は
 [anime-json-extract](https://github.com/noyuno/pisite/blob/master/bin/anime-json-extract)
 のスクリプトとキーワードファイルを使用して，JSONファイルを再作成しました．
 
-最後にJSONファイルの場所を `script/env.coffee`の`ANIMEFILE`に設定します．
+つぎにJSONファイルの場所を `script/env.coffee`の`ANIMEFILE`に設定します．
+最後に`secret/token`に`ANIME=true`を記述します．
 
 ### 4.6. 降雨状況
 
