@@ -81,7 +81,7 @@ Slackと連携するには次の変数を`secret/token`に設定する必要が�
     HUBOT_SLACK_BOTNAME=xxxx
     HUBOT_SLACK_TOKEN=xoxb-1234....-abcd....
 
-次に，`secret/token`の`HUBOT_SLACK_USERID`を`https://slack.com/api/users.list?token=xoxb-000000...`に
+次に，`secret/token`で設定する，ボットが送信する既定の宛先`HUBOT_SLACK_USERID`を`https://slack.com/api/users.list?token=xoxb-000000...`に
 アクセスして`UDXXXXXXX`形式で設定します．
 
 ### 4.3. サーバの状況
