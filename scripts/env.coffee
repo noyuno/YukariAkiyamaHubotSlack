@@ -3,7 +3,6 @@
 
 class env
   @NAME: "秋山優花里"
-  @ANIMEFILE: "/var/www/html/data/anime.json"
   @COORDINATES: {\
     "愛知": "137.391528,34.769167"
   }

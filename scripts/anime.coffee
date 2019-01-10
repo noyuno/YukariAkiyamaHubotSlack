@@ -5,10 +5,10 @@ fs = require 'fs'
 schedule = require 'node-schedule'
 env = require './env.coffee'
 
-unless process.env.ANIME?
+unless process.env.ANIMEJSON?
   module.exports=(robot)->
     send = (r) ->
-      text = "この機能は現在無効中です．`secret/token`に`ANIME=true`を記述してください．"
+      text = "この機能は現在無効中です．`secret/token`に`ANIMEJSON=<file>`を記述してください．"
       unless r?
         robot.send({room:process.env.HUBOT_SLACK_USERID}, text)
       else
@@ -37,7 +37,7 @@ timetostr = (ux) ->
   return hour + ":" + min
 
 todaysanime = () ->
-  data = JSON.parse(fs.readFileSync env.ANIMEFILE)
+  data = JSON.parse(fs.readFileSync process.env.ANIMEJSON)
   ret = ""
   d = new Date()
   y = new Date()
@@ -55,7 +55,7 @@ todaysanime = () ->
   return ret
 
 show_on_air = (robot) ->
-  data = JSON.parse(fs.readFileSync env.ANIMEFILE)
+  data = JSON.parse(fs.readFileSync process.env.ANIMEJSON)
   d = Math.floor((new Date()).getTime() / 1000)
   for p in data["items"]
     e = p["StTime"]
@@ -90,7 +90,7 @@ module.exports=(robot)->
   robot.hear /anime list|番組表/i, (r) ->
     show_on_air(robot)
     notify(true)
-    data = JSON.parse(fs.readFileSync env.ANIMEFILE)
+    data = JSON.parse(fs.readFileSync process.env.ANIMEJSON)
     ret = ""
     n = 0
     for p in data["items"]
@@ -108,7 +108,7 @@ module.exports=(robot)->
     send r, ret
 
   notify = (all) ->
-    data = JSON.parse(fs.readFileSync env.ANIMEFILE)
+    data = JSON.parse(fs.readFileSync process.env.ANIMEJSON)
     d = Math.floor((new Date()).getTime() / 1000)
     for p in data["items"]
       e = p["StTime"]
